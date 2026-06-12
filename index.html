@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <!-- モバイル端末での表示を最適化するレスポンシブ用のビューポート設定 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Takeru Mochizuki | Web Creator Portfolio</title>
+  <!-- SEO対策用：サイトの紹介文 -->
+  <meta name="description" content="Webクリエイター Takeru Mochizuki（望月武）のポートフォリオサイト。Antigravityを活用し、見やすく、伝わりやすく、心地よいWebサイトを制作します。">
+  
+  <!-- Google Fonts: Apple風の洗練された文字デザインを表現するため、欧文フォント「Outfit」と日本語フォント「Noto Sans JP」を採用 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- スタイルシートの読み込み -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ナビゲーションバー（Apple公式サイトのような半透明のグローバルメニュー） -->
+  <header class="global-header">
+    <div class="header-container">
+      <a href="#" class="logo-link">T.Mochizuki</a>
+      <!-- モバイル用のメニュー開閉ボタン（ハンバーガーメニュー） -->
+      <button class="menu-toggle" aria-label="メニューを開閉する" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <nav class="nav-menu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+          <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
+          <li class="nav-item"><a href="#works" class="nav-link">Works</a></li>
+          <li class="nav-item"><a href="#appeal" class="nav-link">Appeal</a></li>
+          <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Heroセクション（メインビジュアル） -->
+    <section id="hero" class="hero-section">
+      <!-- LCP（一番大きな要素の描画速度）を最適化するため、fetchpriority="high" を設定した背景用画像 -->
+      <div class="hero-bg-wrapper">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop" 
+             alt="MacBookでWeb制作（プログラミング）を行っているおしゃれな作業風景" 
+             class="hero-bg-image" 
+             fetchpriority="high">
+        <div class="hero-overlay"></div>
+      </div>
+      
+      <div class="hero-content">
+        <span class="hero-subtitle">Web Creator Portfolio</span>
+        <h1 class="hero-title">TAKERU MOCHIZUKI</h1>
+        <p class="hero-lead">「見やすく、伝わりやすく、心地よいWebサイトを制作します。」</p>
+        <div class="hero-actions">
+          <a href="#works" class="btn btn-secondary">Worksを見る</a>
+          <a href="#contact" class="btn btn-secondary">Contact</a>
+        </div>
+      </div>
+      
+      <!-- 下へのスクロールを促すインジケーター -->
+      <div class="scroll-indicator">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Aboutセクション（自己紹介 ＋ プロフィールカード） -->
+    <section id="about" class="about-section section-padding">
+      <div class="container">
+        <!-- セクションのタイトル（大きな英字見出し） -->
+        <div class="section-header fade-in">
+          <span class="section-tag">Who I Am</span>
+          <h2 class="section-title">ABOUT</h2>
+        </div>
+        
+        <div class="about-grid">
+          <!-- 左側（40%）：プロフィール画像 ＋ プロフィールカード -->
+          <div class="about-left fade-in-left">
+            <div class="profile-image-container">
+              <!-- プロフィール画像の丸型表示。ホバー時に少し拡大するアニメーションを設定 -->
+              <img src="images/profile.png" alt="Takeru Mochizuki プロフィール画像" class="profile-image">
+            </div>
+            
+            <!-- Apple風のミニマルなプロフィールカード -->
+            <div class="profile-card">
+              <div class="card-header">
+                <span class="card-badge">PROFILE</span>
+                <h3 class="card-name">Web Creator</h3>
+              </div>
+              <div class="card-body">
+                <p>現在はAntigravityを活用しながらWebサイト制作を学習しています。</p>
+                <p>見やすく、伝わりやすく、使いやすいデザインを意識し、個人事業主や店舗の魅力をWebサイトで届けられるクリエイターを目指しています。</p>
+              </div>
+              <div class="card-footer">
+                <span class="footer-label">Hobby</span>
+                <span class="footer-value">Sauna / Snowboard / Golf</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 右側（60%）：About本文 -->
+          <div class="about-right fade-in-right">
+            <div class="about-content">
+              <h3 class="about-lead">価値を最大化するWeb制作を。</h3>
+              <p>現在はAntigravityを活用したWebサイト制作を中心に学習・制作を行っています。</p>
+              <p>AIの力を活用しながら、企画・デザイン・実装まで一貫して制作し、ユーザーにとって分かりやすく使いやすいサイト作りを心掛けています。</p>
+              <p>見る人にとって見やすく、伝わりやすいデザインを意識しながら制作しています。</p>
+              <p>将来的にはWeb制作を通じて、個人事業主や店舗、企業の魅力をより多くの人へ届けられるクリエイターを目指しています。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skillsセクション（スキル紹介） -->
+    <section id="skills" class="skills-section section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center fade-in">
+          <span class="section-tag">What I Can Do</span>
+          <h2 class="section-title">SKILLS</h2>
+        </div>
+        
+        <!-- カード形式で表示するグリッドレイアウト -->
+        <div class="skills-grid">
+          <!-- スキルカード：Antigravity -->
+          <div class="skill-card fade-in">
+            <div class="skill-icon">
+              <!-- SVGアイコンをインラインで配置し、外部読み込みを削減（表示速度向上） -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h3 class="skill-title">Antigravity</h3>
+            <p class="skill-desc">AIを活用したWebサイト制作。企画からデザイン・実装まで効率的に制作を行います。</p>
+          </div>
+
+          <!-- スキルカード：Web Design -->
+          <div class="skill-card fade-in">
+            <div class="skill-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            </div>
+            <h3 class="skill-title">Web Design</h3>
+            <p class="skill-desc">見やすく伝わりやすいレイアウト設計とデザイン制作。</p>
+          </div>
+
+          <!-- スキルカード：Responsive Design -->
+          <div class="skill-card fade-in">
+            <div class="skill-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <h3 class="skill-title">Responsive Design</h3>
+            <p class="skill-desc">スマートフォン・タブレット・PCに対応したレスポンシブデザイン。</p>
+          </div>
+
+          <!-- スキルカード：Prompt Design -->
+          <div class="skill-card fade-in">
+            <div class="skill-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3 class="skill-title">Prompt Design</h3>
+            <p class="skill-desc">目的に合わせてAIへ適切な指示を行い、品質の高いWebサイトを制作。</p>
+          </div>
+
+          <!-- スキルカード：Git / GitHub -->
+          <div class="skill-card fade-in">
+            <div class="skill-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 15V9a4 4 0 0 0-4-4H9M6 9v6"/></svg>
+            </div>
+            <h3 class="skill-title">Git / GitHub</h3>
+            <p class="skill-desc">ソースコード管理とバージョン管理。</p>
+          </div>
+
+          <!-- スキルカード：VS Code -->
+          <div class="skill-card fade-in">
+            <div class="skill-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3 class="skill-title">VS Code</h3>
+            <p class="skill-desc">制作・編集環境として活用。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Worksセクション（制作実績） -->
+    <section id="works" class="works-section section-padding">
+      <div class="container">
+        <div class="section-header fade-in">
+          <span class="section-tag">My Creations</span>
+          <h2 class="section-title">WORKS</h2>
+        </div>
+        
+        <div class="works-grid">
+          <!-- 実績① AIスクールLP -->
+          <article class="work-card fade-in">
+            <div class="work-image-wrapper">
+              <img src="images/ai-school-lp.png" alt="AIスクールLP 制作実績" class="work-image" loading="lazy">
+              <div class="work-hover-overlay">
+                <a href="https://a-ischool-lp.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-link-btn">
+                  <span>サイトを見る</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="work-info">
+              <div class="work-tech">Antigravity / HTML / CSS / JavaScript</div>
+              <h3 class="work-title">AIスクールLP</h3>
+              <p class="work-description">AIスクールの受講者獲得を目的として制作したランディングページ。視認性の高いレイアウトと行動を促す導線設計を意識しました。</p>
+              <div class="work-footer">
+                <a href="https://a-ischool-lp.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-text-link">
+                  Visit Project 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 実績② Cafe Blossom LP -->
+          <article class="work-card fade-in">
+            <div class="work-image-wrapper">
+              <img src="images/cafe-blossom-lp.png" alt="Cafe Blossom LP 制作実績" class="work-image" loading="lazy">
+              <div class="work-hover-overlay">
+                <a href="https://cafe-blossom-lp.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-link-btn">
+                  <span>サイトを見る</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="work-info">
+              <div class="work-tech">Antigravity / HTML / CSS / JavaScript</div>
+              <h3 class="work-title">Cafe Blossom LP</h3>
+              <p class="work-description">女性をターゲットにしたカフェのランディングページ。柔らかい配色と余白を活かし、居心地の良い雰囲気を表現しました。</p>
+              <div class="work-footer">
+                <a href="https://cafe-blossom-lp.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-text-link">
+                  Visit Project 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 実績③ ECサイト -->
+          <article class="work-card fade-in">
+            <div class="work-image-wrapper">
+              <img src="images/ec-site.png" alt="ECサイト 制作実績" class="work-image" loading="lazy">
+              <div class="work-hover-overlay">
+                <a href="https://youhuku-ec.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-link-btn">
+                  <span>サイトを見る</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="work-info">
+              <div class="work-tech">Antigravity / HTML / CSS / JavaScript</div>
+              <h3 class="work-title">ECサイト</h3>
+              <p class="work-description">商品を見やすく整理し、購入までスムーズに進めることを意識して制作したECサイトです。</p>
+              <div class="work-footer">
+                <a href="https://youhuku-ec.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-text-link">
+                  Visit Project 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- 実績④ イタリアンレストランサイト -->
+          <article class="work-card fade-in">
+            <div class="work-image-wrapper">
+              <img src="images/italian-restaurant.png" alt="イタリアンレストランサイト 制作実績" class="work-image" loading="lazy">
+              <div class="work-hover-overlay">
+                <a href="https://itarian-web.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-link-btn">
+                  <span>サイトを見る</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+            <div class="work-info">
+              <div class="work-tech">Antigravity / HTML / CSS / JavaScript</div>
+              <h3 class="work-title">イタリアンレストランサイト</h3>
+              <p class="work-description">店舗の魅力やメニュー情報を分かりやすく伝えることを目的に制作。スマートフォンでも見やすいレスポンシブ対応を実装しました。</p>
+              <div class="work-footer">
+                <a href="https://itarian-web.vercel.app/" target="_blank" rel="noopener noreferrer" class="work-text-link">
+                  Visit Project 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Appealセクション（アピールポイント） -->
+    <section id="appeal" class="appeal-section section-padding bg-light">
+      <div class="container">
+        <div class="section-header text-center fade-in">
+          <span class="section-tag">Strengths</span>
+          <h2 class="section-title">APPEAL</h2>
+        </div>
+        
+        <div class="appeal-grid">
+          <!-- アピール1: 丁寧な制作 -->
+          <div class="appeal-card fade-in">
+            <div class="appeal-count">01</div>
+            <h3 class="appeal-title">丁寧な制作</h3>
+            <p class="appeal-desc">見た目だけでなく、使いやすさも意識して制作します。</p>
+          </div>
+
+          <!-- アピール2: 継続力 -->
+          <div class="appeal-card fade-in">
+            <div class="appeal-count">02</div>
+            <h3 class="appeal-title">継続力</h3>
+            <p class="appeal-desc">毎日学習を続けながらスキルアップしています。</p>
+          </div>
+
+          <!-- アピール3: ユーザー目線 -->
+          <div class="appeal-card fade-in">
+            <div class="appeal-count">03</div>
+            <h3 class="appeal-title">ユーザー目線</h3>
+            <p class="appeal-desc">見る人が迷わず目的にたどり着けるサイト作りを大切にしています。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contactセクション（お問い合わせフォーム） -->
+    <section id="contact" class="contact-section section-padding">
+      <div class="container">
+        <div class="section-header text-center fade-in">
+          <span class="section-tag">Get In Touch</span>
+          <h2 class="section-title">CONTACT</h2>
+        </div>
+        
+        <div class="contact-form-container fade-in">
+          <form action="#" method="POST" id="contact-form" class="contact-form">
+            <!-- お名前入力欄 -->
+            <div class="form-group">
+              <label for="name" class="form-label">お名前</label>
+              <input type="text" id="name" name="name" class="form-control" required placeholder="Takeru Mochizuki">
+            </div>
+            
+            <!-- メールアドレス入力欄 -->
+            <div class="form-group">
+              <label for="email" class="form-label">メールアドレス</label>
+              <input type="email" id="email" name="email" class="form-control" required placeholder="example@email.com">
+            </div>
+            
+            <!-- お問い合わせ内容入力欄 -->
+            <div class="form-group">
+              <label for="message" class="form-label">お問い合わせ内容</label>
+              <textarea id="message" name="message" class="form-control" rows="6" required placeholder="お仕事のご相談やご質問など、お気軽にお問い合わせください。"></textarea>
+            </div>
+            
+            <!-- 送信完了時のメッセージ表示領域（初期状態は非表示） -->
+            <div id="form-message" class="form-message"></div>
+            
+            <div class="form-submit">
+              <button type="submit" id="submit-btn" class="btn btn-primary btn-block">
+                <span>送信する</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッターセクション -->
+  <footer class="global-footer">
+    <div class="container footer-container">
+      <!-- Instagram リンク（プロフィールカードから除外し、こちらにシンプルに配置） -->
+      <div class="footer-social">
+        <a href="https://www.instagram.com/takeru_m_0114/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="social-icon"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          <span class="social-text">Instagram</span>
+        </a>
+      </div>
+      
+      <!-- コピーライト -->
+      <div class="footer-copyright">
+        <p>© Takeru Mochizuki</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- スクリプトの読み込み -->
+  <script src="script.js"></script>
+</body>
+</html>
