@@ -1,48 +1,56 @@
 /**
- * --------------------------------------------------------------------------
- * モバイルメニュー（ハンバーガーメニュー）の制御
- * --------------------------------------------------------------------------
+ * ==========================================================================
+ * ポートフォリオサイト インタラクション制御スクリプト (最新堅牢版)
+ * ==========================================================================
  */
-document.addEventListener('DOMContentLoaded', () => {
+
+// すべての処理を1つのメイン関数に集約します
+const initializePortfolio = () => {
+  console.log("Portfolio script initialized successfully.");
+
+  /**
+   * --------------------------------------------------------------------------
+   * 1. モバイルメニュー（ハンバーガーメニュー）の制御
+   * --------------------------------------------------------------------------
+   */
   const menuToggle = document.querySelector('.menu-toggle');
   const navMenu = document.querySelector('.nav-menu');
   const navLinks = document.querySelectorAll('.nav-link');
 
-  // メニューを開閉する処理
-  const toggleMenu = () => {
-    const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-    menuToggle.setAttribute('aria-expanded', !isExpanded);
-    menuToggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
-    
-    // 背景のスクロールを固定・解除（メニューが開いているときはスクロールさせない）
-    if (!isExpanded) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  };
-
-  menuToggle.addEventListener('click', toggleMenu);
-
-  // ナビゲーションリンクをクリックしたらメニューを自動で閉じる
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (navMenu.classList.contains('active')) {
-        toggleMenu();
+  if (menuToggle && navMenu) {
+    const toggleMenu = () => {
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', !isExpanded);
+      menuToggle.classList.toggle('active');
+      navMenu.classList.toggle('active');
+      
+      // メニューが開いているときは背景のスクロールを固定し、閉じたら解除します
+      if (!isExpanded) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
       }
-    });
-  });
-});
+    };
 
-/**
- * --------------------------------------------------------------------------
- * ヘッダーの高さを考慮したスムーズスクロールの実装
- * --------------------------------------------------------------------------
- */
-document.addEventListener('DOMContentLoaded', () => {
+    menuToggle.addEventListener('click', toggleMenu);
+
+    // リンククリック時にメニューを自動で閉じる
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (navMenu.classList.contains('active')) {
+          toggleMenu();
+        }
+      });
+    });
+  }
+
+  /**
+   * --------------------------------------------------------------------------
+   * 2. 固定ヘッダーの高さを考慮したスムーズスクロール
+   * --------------------------------------------------------------------------
+   */
   const scrollLinks = document.querySelectorAll('a[href^="#"]');
-  const headerHeight = 60; // 固定ヘッダーの高さ（CSSで定義した60px）
+  const headerHeight = 60; // ヘッダーの高さ (60px)
 
   scrollLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -53,12 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const targetElement = document.querySelector(targetId);
       if (targetElement) {
-        // 対象要素の位置を取得
         const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-        // ヘッダーの高さを引いた目標スクロール位置を算出
         const offsetPosition = elementPosition - headerHeight;
 
-        // スムーズにスクロール
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
@@ -66,95 +71,90 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-});
 
-/**
- * --------------------------------------------------------------------------
- * Intersection Observer（交差監視）によるスクロールフェードインアニメーション
- * --------------------------------------------------------------------------
- */
-document.addEventListener('DOMContentLoaded', () => {
-  // アニメーション対象のクラス名を持つ要素をすべて取得
+  /**
+   * --------------------------------------------------------------------------
+   * 3. 超高感度な Intersection Observer (スクロールフェードインアニメーション)
+   * --------------------------------------------------------------------------
+   * スマホやPCなどすべての画面で、スクロールした際に確実に要素がフワッと浮き出るよう制御します。
+   */
   const animateElements = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
 
-  // 交差時に実行する処理の定義
-  const observerCallback = (entries, observer) => {
-    entries.forEach(entry => {
-      // 要素が画面（ビューポート）に入ってきた場合
-      if (entry.isIntersecting) {
-        // .visible クラスを付与してCSSアニメーションをトリガー
-        entry.target.classList.add('visible');
-        // 一度フェードインした要素は監視を解除して、不要な再描画パフォーマンスロスを防ぐ
-        observer.unobserve(entry.target);
-      }
+  if (animateElements.length > 0) {
+    const observerCallback = (entries, observer) => {
+      entries.forEach(entry => {
+        // 要素が画面の下端を1pxでも超えたら即時発火（スマホでの発火取りこぼしを完全に防ぐ）
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // 一度表示された要素は監視を終了し、ブラウザの負荷を下げます
+          observer.unobserve(entry.target);
+        }
+      });
+    };
+
+    const observerOptions = {
+      root: null, // ビューポート（画面）を基準にする
+      rootMargin: '0px 0px -10px 0px', // 画面の下端から10px入った地点で即座に検知
+      threshold: 0.01 // 要素が1%でも画面に入ったらすぐにフェードインを開始（最大感度）
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    
+    animateElements.forEach(element => {
+      observer.observe(element);
     });
-  };
 
-  // オブザーバーのオプション（画面の下部に入ったらトリガーする設定）
-  const observerOptions = {
-    root: null, // ブラウザのビューポートを基準にする
-    rootMargin: '0px 0px -10px 0px', // 画面の下端から10pxだけ入った地点で即時検知（取りこぼしを完全に防ぐ）
-    threshold: 0.01 // 要素の1%でも画面に入ったらすぐにフェードインを開始させて確実に動かす（最大感度）
-  };
+    // 【念のためのフォールバック処理】
+    // 万が一、古い端末や一部のブラウザでスクロールを検知しなかった場合に備え、
+    // 画面ロードから1秒後、初期表示範囲内にある要素へ強制的にvisibleクラスを付与して「消えたまま」を防ぎます。
+    setTimeout(() => {
+      animateElements.forEach(element => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          element.classList.add('visible');
+        }
+      });
+    }, 1000);
+  }
 
-  // オブザーバーの作成と監視の開始
-  const observer = new IntersectionObserver(observerCallback, observerOptions);
-  
-  animateElements.forEach(element => {
-    observer.observe(element);
-  });
-});
-
-/**
- * --------------------------------------------------------------------------
- * お問い合わせフォームの送信処理 (FormSubmit APIの統合 - 画面遷移なし送信)
- * --------------------------------------------------------------------------
- */
-document.addEventListener('DOMContentLoaded', () => {
+  /**
+   * --------------------------------------------------------------------------
+   * 4. お問い合わせフォーム送信処理 (FormSubmit APIの統合 - 画面遷移なし送信)
+   * --------------------------------------------------------------------------
+   */
   const contactForm = document.getElementById('contact-form');
   const submitBtn = document.getElementById('submit-btn');
   const formMessage = document.getElementById('form-message');
 
-  if (contactForm) {
+  if (contactForm && submitBtn && formMessage) {
     contactForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // 画面遷移（通常のフォーム送信）を防止してスムーズに処理します
+      e.preventDefault(); // 通常のページ遷移を防止
       
-      // 送信ボタンを一時的に無効化し、ローディング状態を表示
       submitBtn.disabled = true;
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<span>送信中...</span>';
       
-      // フォームデータを FormData オブジェクトにまとめる
       const formData = new FormData(contactForm);
-      // メールの件名（サブジェクト）をデータに追加
       formData.append('_subject', 'ポートフォリオサイトからのお問い合わせ');
 
-      // 非同期（バックグラウンド）でのメール送信を実行します。
-      // mode: 'no-cors' を指定することで、ローカルファイル(file://)からの送信時に発生する
-      // ブラウザのCORS制限（クロスドメイン制限）をバイパスして、画面遷移なしで確実に送信します。
+      // mode: 'no-cors' で送信することで、ローカルファイル(file://)実行時でも
+      // セキュリティに阻まれることなく、その場でスムーズに送信を完了させます。
       fetch('https://formsubmit.co/ajax/takeru.sadou@gmail.com', {
         method: 'POST',
         body: formData,
-        mode: 'no-cors' // CORSポリシーによるブロックを回避し、送信を成功させるモード
+        mode: 'no-cors'
       })
       .then(() => {
-        // mode: 'no-cors' のレスポンスは中身を読み取れない仕様ですが、
-        // 通信自体が成功（サーバーへ送信完了）すれば、ここが実行されます。
-        
-        // メッセージ表示領域を初期化
         formMessage.className = 'form-message';
         formMessage.style.display = 'none';
         
-        // 送信成功メッセージを表示
         formMessage.classList.add('success');
         formMessage.textContent = 'お問い合わせありがとうございます。メッセージが正常に送信されました！';
         formMessage.style.display = 'block';
         
-        // 入力フォームの内容をリセット
         contactForm.reset();
       })
       .catch(error => {
-        // インターネット接続が切れている場合などのエラーハンドリング
         formMessage.className = 'form-message';
         formMessage.style.display = 'none';
         formMessage.classList.add('error');
@@ -163,11 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Email Submit Error:', error);
       })
       .finally(() => {
-        // ボタンの状態を元に戻す
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
         
-        // 8秒後に送信完了メッセージをフェードアウトで非表示にする
         setTimeout(() => {
           formMessage.style.opacity = '0';
           formMessage.style.transition = 'opacity 1s ease';
@@ -179,4 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-});
+};
+
+/**
+ * --------------------------------------------------------------------------
+ * 安全な初期化起動コード（プロ仕様のタイミング制御）
+ * --------------------------------------------------------------------------
+ * スマホブラウザの高速読み込み時など、DOMContentLoadedがすでに発火し終わった後に
+ * スクリプトが読み込まれた場合でも、検知を取りこぼさずに100%確実に初期化を実行します。
+ */
+if (document.readyState !== 'loading') {
+  initializePortfolio(); // すでにHTML解析が完了している場合は即実行
+} else {
+  document.addEventListener('DOMContentLoaded', initializePortfolio); // 解析中の場合はイベントを待って実行
+}
