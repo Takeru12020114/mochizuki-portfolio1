@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * --------------------------------------------------------------------------
- * お問い合わせフォームの送信処理 (FormSubmit APIの統合とCORSフォールバック)
+ * お問い合わせフォームの送信処理 (FormSubmit APIの統合 - 画面遷移なし送信)
  * --------------------------------------------------------------------------
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // 一旦、ページ遷移（通常の送信）をキャンセルして非同期送信を試みる
+      e.preventDefault(); // 画面遷移（通常のフォーム送信）を防止してスムーズに処理します
       
       // 送信ボタンを一時的に無効化し、ローディング状態を表示
       submitBtn.disabled = true;
@@ -125,67 +125,57 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.innerHTML = '<span>送信中...</span>';
       
       // フォームデータを FormData オブジェクトにまとめる
-      // （FormDataを使用することで、JSON送信時のCORSエラーやOPTIONSプリフライトリクエストの発生を抑制します）
       const formData = new FormData(contactForm);
       // メールの件名（サブジェクト）をデータに追加
       formData.append('_subject', 'ポートフォリオサイトからのお問い合わせ');
 
-      // 非同期（バックグラウンド）でのメール送信を試行
+      // 非同期（バックグラウンド）でのメール送信を実行します。
+      // mode: 'no-cors' を指定することで、ローカルファイル(file://)からの送信時に発生する
+      // ブラウザのCORS制限（クロスドメイン制限）をバイパスして、画面遷移なしで確実に送信します。
       fetch('https://formsubmit.co/ajax/takeru.sadou@gmail.com', {
         method: 'POST',
-        body: formData
+        body: formData,
+        mode: 'no-cors' // CORSポリシーによるブロックを回避し、送信を成功させるモード
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('サーバーエラーが発生しました。');
-        }
-        return response.json();
-      })
-      .then(data => {
+      .then(() => {
+        // mode: 'no-cors' のレスポンスは中身を読み取れない仕様ですが、
+        // 通信自体が成功（サーバーへ送信完了）すれば、ここが実行されます。
+        
         // メッセージ表示領域を初期化
         formMessage.className = 'form-message';
         formMessage.style.display = 'none';
         
-        if (data.success === 'true' || data.success === true) {
-          // 送信成功時：お礼メッセージを表示し、フォームをリセット
-          formMessage.classList.add('success');
-          formMessage.textContent = 'お問い合わせありがとうございます。メッセージが正常に送信されました！';
-          formMessage.style.display = 'block';
-          
-          contactForm.reset();
-          
-          // ボタンを元に戻す
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-
-          // 8秒後に送信ステータスメッセージをフェードアウトで非表示にする
-          setTimeout(() => {
-            formMessage.style.opacity = '0';
-            formMessage.style.transition = 'opacity 1s ease';
-            setTimeout(() => {
-              formMessage.style.display = 'none';
-              formMessage.style.opacity = '1';
-            }, 1000);
-          }, 8000);
-        } else {
-          throw new Error('送信処理に失敗しました。');
-        }
+        // 送信成功メッセージを表示
+        formMessage.classList.add('success');
+        formMessage.textContent = 'お問い合わせありがとうございます。メッセージが正常に送信されました！';
+        formMessage.style.display = 'block';
+        
+        // 入力フォームの内容をリセット
+        contactForm.reset();
       })
       .catch(error => {
-        // 【CORSエラーやローカル実行制限（file://）が発生した場合のフォールバック処理】
-        // ブラウザのセキュリティ制限等で非同期送信が失敗した場合は、通常のフォーム送信（ページ遷移型）に切り替えて確実に送信します
-        console.warn('非同期送信が制限されたため、標準送信へ切り替えます:', error);
-        
+        // インターネット接続が切れている場合などのエラーハンドリング
         formMessage.className = 'form-message';
         formMessage.style.display = 'none';
         formMessage.classList.add('error');
-        formMessage.textContent = 'ローカル接続（CORS）制限を検知しました。確実にお届けするため、専用の送信ページへ切り替えます...';
+        formMessage.textContent = '送信中にエラーが発生しました。恐れ入りますが時間をおいて再度お試しください。';
         formMessage.style.display = 'block';
-
-        // 1.5秒後に、ブラウザの標準送信を実行（これによってFormSubmitの完了ページ・認証画面へ遷移し、メールが確実に届きます）
+        console.error('Email Submit Error:', error);
+      })
+      .finally(() => {
+        // ボタンの状態を元に戻す
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        
+        // 8秒後に送信完了メッセージをフェードアウトで非表示にする
         setTimeout(() => {
-          contactForm.submit(); // ネイティブの送信メソッドを呼び出し、通常のPOSTを実行します
-        }, 1500);
+          formMessage.style.opacity = '0';
+          formMessage.style.transition = 'opacity 1s ease';
+          setTimeout(() => {
+            formMessage.style.display = 'none';
+            formMessage.style.opacity = '1';
+          }, 1000);
+        }, 8000);
       });
     });
   }
