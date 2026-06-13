@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * --------------------------------------------------------------------------
- * お問い合わせフォームの送信処理 (FormSubmit APIの統合)
+ * お問い合わせフォームの送信処理 (FormSubmit APIの統合とCORSフォールバック)
  * --------------------------------------------------------------------------
  */
 document.addEventListener('DOMContentLoaded', () => {
@@ -117,72 +117,75 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // ページリロード（通常の送信処理）をキャンセル
+      e.preventDefault(); // 一旦、ページ遷移（通常の送信）をキャンセルして非同期送信を試みる
       
-      // 送信ボタンを無効化し、ローディング演出を行う
+      // 送信ボタンを一時的に無効化し、ローディング状態を表示
       submitBtn.disabled = true;
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<span>送信中...</span>';
       
-      // フォームデータの収集
-      const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        message: document.getElementById('message').value,
-        _subject: 'ポートフォリオサイトからのお問い合わせ'
-      };
+      // フォームデータを FormData オブジェクトにまとめる
+      // （FormDataを使用することで、JSON送信時のCORSエラーやOPTIONSプリフライトリクエストの発生を抑制します）
+      const formData = new FormData(contactForm);
+      // メールの件名（サブジェクト）をデータに追加
+      formData.append('_subject', 'ポートフォリオサイトからのお問い合わせ');
 
-      // FormSubmitのAJAXエンドポイントを使用して、バックグラウンドでメールを送信します
+      // 非同期（バックグラウンド）でのメール送信を試行
       fetch('https://formsubmit.co/ajax/takeru.sadou@gmail.com', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(formData)
+        body: formData
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('サーバーエラーが発生しました。');
+        }
+        return response.json();
+      })
       .then(data => {
-        // メッセージ領域を初期化
+        // メッセージ表示領域を初期化
         formMessage.className = 'form-message';
         formMessage.style.display = 'none';
         
         if (data.success === 'true' || data.success === true) {
-          // 送信成功時の処理
+          // 送信成功時：お礼メッセージを表示し、フォームをリセット
           formMessage.classList.add('success');
           formMessage.textContent = 'お問い合わせありがとうございます。メッセージが正常に送信されました！';
           formMessage.style.display = 'block';
           
-          // フォームの内容をリセット
           contactForm.reset();
+          
+          // ボタンを元に戻す
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+
+          // 8秒後に送信ステータスメッセージをフェードアウトで非表示にする
+          setTimeout(() => {
+            formMessage.style.opacity = '0';
+            formMessage.style.transition = 'opacity 1s ease';
+            setTimeout(() => {
+              formMessage.style.display = 'none';
+              formMessage.style.opacity = '1';
+            }, 1000);
+          }, 8000);
         } else {
-          // 送信エラー発生時
-          throw new Error('FormSubmit API returned error');
+          throw new Error('送信処理に失敗しました。');
         }
       })
       .catch(error => {
-        // 送信失敗時（オフラインやサーバーエラーなど）の処理
+        // 【CORSエラーやローカル実行制限（file://）が発生した場合のフォールバック処理】
+        // ブラウザのセキュリティ制限等で非同期送信が失敗した場合は、通常のフォーム送信（ページ遷移型）に切り替えて確実に送信します
+        console.warn('非同期送信が制限されたため、標準送信へ切り替えます:', error);
+        
         formMessage.className = 'form-message';
         formMessage.style.display = 'none';
         formMessage.classList.add('error');
-        formMessage.textContent = '送信中にエラーが発生しました。恐れ入りますが時間をおいて再度お試しください。';
+        formMessage.textContent = 'ローカル接続（CORS）制限を検知しました。確実にお届けするため、専用の送信ページへ切り替えます...';
         formMessage.style.display = 'block';
-        console.error('Email Submit Error:', error);
-      })
-      .finally(() => {
-        // ボタンの状態を元に戻す
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-        
-        // 8秒後に送信ステータスメッセージをフェードアウトで非表示にする
+
+        // 1.5秒後に、ブラウザの標準送信を実行（これによってFormSubmitの完了ページ・認証画面へ遷移し、メールが確実に届きます）
         setTimeout(() => {
-          formMessage.style.opacity = '0';
-          formMessage.style.transition = 'opacity 1s ease';
-          setTimeout(() => {
-            formMessage.style.display = 'none';
-            formMessage.style.opacity = '1';
-          }, 1000);
-        }, 8000);
+          contactForm.submit(); // ネイティブの送信メソッドを呼び出し、通常のPOSTを実行します
+        }, 1500);
       });
     });
   }
